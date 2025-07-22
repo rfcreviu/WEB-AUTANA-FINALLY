@@ -1,0 +1,1378 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UDON - Sistema de Reservas</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍜</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Skip Links for Accessibility -->
+    <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+    
+    <!-- Hero Section -->
+    <section class="hero" role="banner">
+        <div class="hero-video-container">
+            <video class="hero-video" autoplay muted loop playsinline>
+                <source src="hero-video.mp4" type="video/mp4">
+                <!-- Fallback para navegadores que no soportan video -->
+                <div class="hero-background"></div>
+            </video>
+            <div class="hero-overlay"></div>
+        </div>
+        <div class="hero-content">
+            <div class="brand-logo">
+                <img src="LOGO PNG UDON.png" alt="UDON Logo" class="main-logo">
+            </div>
+            <div class="hero-text">
+                <h2 class="hero-title">Reserva tu experiencia gastronómica</h2>
+                <p class="hero-subtitle">Auténtica cocina asiática en el corazón de Canarias</p>
+            </div>
+            <button class="cta-button" onclick="scrollToReservations()" aria-label="Ir a reservar mesa">
+                <span>Reservar mesa</span>
+                <i class="fas fa-arrow-right" aria-hidden="true"></i>
+            </button>
+        </div>
+        <div class="scroll-indicator" aria-hidden="true">
+            <div class="scroll-dot"></div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main id="main-content" class="main-content" role="main">
+        <!-- Restaurant Selection -->
+        <section id="restaurant-selection" class="section" role="region" aria-labelledby="restaurant-section-title">
+            <div class="container">
+                <div class="section-header">
+                    <h2 id="restaurant-section-title" class="section-title">Elige tu restaurante</h2>
+                    <p class="section-subtitle">Tres ubicaciones únicas en Canarias</p>
+                </div>
+                <div class="restaurants-grid" id="restaurants-grid" role="group" aria-label="Lista de restaurantes disponibles">
+                    <!-- Los restaurantes se cargarán dinámicamente -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Reservation Form -->
+        <section id="reservation-form" class="section hidden" role="region" aria-labelledby="form-section-title">
+            <div class="container">
+                <div class="form-wrapper">
+                    <div class="form-header">
+                        <button class="back-button" onclick="goBack()" aria-label="Volver a selección de restaurante">
+                            <i class="fas fa-arrow-left" aria-hidden="true"></i>
+                        </button>
+                        <div class="form-title-group">
+                            <h2 id="form-section-title" class="form-title">Completa tu reserva</h2>
+                            <p class="form-subtitle">en <span id="selected-restaurant-name" class="restaurant-highlight"></span></p>
+                        </div>
+                    </div>
+                    
+                    <form id="reservationForm" class="reservation-form" novalidate>
+                        <fieldset class="form-section">
+                            <legend class="form-section-title">Información personal</legend>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="customerName" class="form-label">Nombre completo</label>
+                                    <input type="text" id="customerName" class="form-input" required autocomplete="name">
+                                    <div class="form-icon" aria-hidden="true">
+                                        <i class="fas fa-user"></i>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="customerPhone" class="form-label">Teléfono</label>
+                                    <input type="tel" id="customerPhone" class="form-input" required autocomplete="tel">
+                                    <div class="form-icon" aria-hidden="true">
+                                        <i class="fas fa-phone"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="customerEmail" class="form-label">Email (opcional)</label>
+                                <input type="email" id="customerEmail" class="form-input" autocomplete="email">
+                                <div class="form-icon" aria-hidden="true">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <div class="form-help">Te enviaremos la confirmación de tu reserva</div>
+                            </div>
+                        </fieldset>
+
+                        <fieldset class="form-section">
+                            <legend class="form-section-title">Detalles de la reserva</legend>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="reservationDate" class="form-label">Fecha</label>
+                                    <input type="date" id="reservationDate" class="form-input" required>
+                                    <div class="form-icon" aria-hidden="true">
+                                        <i class="fas fa-calendar"></i>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="reservationTime" class="form-label">Hora</label>
+                                    <select id="reservationTime" class="form-select" required>
+                                        <option value="">Selecciona una hora</option>
+                                    </select>
+                                    <div class="form-icon" aria-hidden="true">
+                                        <i class="fas fa-clock"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="guests" class="form-label">Comensales</label>
+                                    <select id="guests" class="form-select" required>
+                                        <option value="">Número de personas</option>
+                                        <option value="1">1 persona</option>
+                                        <option value="2">2 personas</option>
+                                        <option value="3">3 personas</option>
+                                        <option value="4">4 personas</option>
+                                        <option value="5">5 personas</option>
+                                        <option value="6">6 personas</option>
+                                    </select>
+                                    <div class="form-icon" aria-hidden="true">
+                                        <i class="fas fa-users"></i>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="tableSelect" class="form-label">Mesa disponible</label>
+                                    <select id="tableSelect" class="form-select" required>
+                                        <option value="">Primero selecciona comensales</option>
+                                    </select>
+                                    <div class="form-icon" aria-hidden="true">
+                                        <i class="fas fa-table"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <!-- Consentimiento de Protección de Datos -->
+                        <fieldset class="form-section consent-section">
+                            <div class="consent-group">
+                                <div class="checkbox-group">
+                                    <input type="checkbox" id="dataConsent" class="consent-checkbox" required>
+                                    <label for="dataConsent" class="consent-label">
+                                        <span class="checkbox-custom"></span>
+                                        <span class="consent-text">
+                                            He leído y acepto la 
+                                            <a href="/privacidad.html" target="_blank" class="legal-link">Política de Privacidad</a> 
+                                            y el 
+                                            <a href="/aviso-legal.html" target="_blank" class="legal-link">Aviso Legal</a>.
+                                            Consiento el tratamiento de mis datos personales para la gestión de la reserva.
+                                        </span>
+                                    </label>
+                                </div>
+                                <div class="checkbox-group marketing-consent">
+                                    <input type="checkbox" id="marketingConsent" class="consent-checkbox">
+                                    <label for="marketingConsent" class="consent-label">
+                                        <span class="checkbox-custom"></span>
+                                        <span class="consent-text">
+                                            Acepto recibir comunicaciones comerciales sobre ofertas y promociones de UDON 
+                                            (opcional).
+                                        </span>
+                                    </label>
+                                </div>
+                                <div class="consent-info">
+                                    <i class="fas fa-shield-alt"></i>
+                                    <span>Tus datos están protegidos según el RGPD y la LOPD-GDD</span>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <div class="form-actions">
+                            <button type="submit" class="submit-button">
+                                <span id="submit-text">Confirmar reserva</span>
+                                <span id="submit-loading" class="loading hidden">
+                                    <i class="fas fa-spinner fa-spin"></i>
+                                </span>
+                                <i class="fas fa-check submit-icon"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Confirmation Section -->
+        <section id="confirmation" class="section hidden" role="region" aria-labelledby="confirmation-title">
+            <div class="container">
+                <div class="confirmation-card">
+                    <div class="confirmation-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h2 id="confirmation-title" class="confirmation-title">¡Reserva confirmada!</h2>
+                    <div class="confirmation-details" id="reservation-details"></div>
+                    <div class="confirmation-message">
+                        <p>Hemos enviado los detalles de tu reserva por email. Si necesitas hacer cambios, contacta directamente con el restaurante.</p>
+                    </div>
+                    <div class="confirmation-actions">
+                        <a href="https://www.udon.es" class="website-button" target="_blank">
+                            <span>Visitar UDON.es</span>
+                            <i class="fas fa-external-link-alt"></i>
+                        </a>
+                        <button class="new-reservation-button" onclick="newReservation()">
+                            <i class="fas fa-plus"></i>
+                            <span>Nueva reserva</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features-section">
+            <div class="container">
+                <div class="features-grid">
+                    <a href="https://www.udon.com/producto/" target="_blank" class="feature-card feature-link" aria-label="Ver productos UDON - Cocina auténtica">
+                        <div class="feature-icon">
+                            <i class="fas fa-utensils"></i>
+                        </div>
+                        <h3 class="feature-title">Cocina auténtica</h3>
+                        <p class="feature-description">Los mejores sabores asiáticos preparados con ingredientes frescos y técnicas tradicionales</p>
+                        <div class="feature-link-indicator">
+                            <i class="fas fa-external-link-alt"></i>
+                        </div>
+                    </a>
+                    
+                    <a href="https://www.google.com/maps/search/UDON+CANARIAS/@28.0940626,-15.517843,13z/data=!3m1!4b1?entry=ttu&g_ep=EgoyMDI1MDcwNy4wIKXMDSoASAFQAw%3D%3D" target="_blank" class="feature-card feature-link" aria-label="Ver ubicaciones UDON en Google Maps">
+                        <div class="feature-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <h3 class="feature-title">Tres ubicaciones</h3>
+                        <p class="feature-description">Encuentra el restaurante UDON más cercano en Canarias</p>
+                        <div class="feature-link-indicator">
+                            <i class="fas fa-external-link-alt"></i>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer Legal -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <div class="logo-icon small">🍜</div>
+                        <span class="brand-name">UDON</span>
+                    </div>
+                    <p class="footer-tagline">Asian Food Experience</p>
+                </div>
+                <div class="footer-links">
+                    <a href="https://www.udon.es" target="_blank" class="footer-link">
+                        <i class="fas fa-globe"></i>
+                        <span>Web oficial</span>
+                    </a>
+                    <a href="admin.html" class="admin-access-button" title="Acceso al panel de administración">
+                        <i class="fas fa-user-shield"></i>
+                        <span>Panel Admin</span>
+                    </a>
+                </div>
+            </div>
+            <div class="footer-legal">
+                <div class="legal-links">
+                    <a href="/aviso-legal.html" target="_blank">Aviso Legal</a>
+                    <a href="/privacidad.html" target="_blank">Política de Privacidad</a>
+                    <a href="/cookies.html" target="_blank">Política de Cookies</a>
+                </div>
+                <div class="legal-info">
+                    <p>&copy; 2025 Noodles Autana S.L. - CIF: B76288372</p>
+                    <p>Todos los derechos reservados | Sistema de reservas con protección RGPD</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Banner de Cookies -->
+    <div id="cookie-banner" class="cookie-banner hidden">
+        <div class="cookie-content">
+            <div class="cookie-text">
+                <i class="fas fa-cookie-bite"></i>
+                <div class="cookie-message">
+                    <strong>Uso de Cookies</strong>
+                    <p>Utilizamos cookies técnicas necesarias para el funcionamiento del sitio y cookies funcionales para mejorar tu experiencia. Puedes configurar tus preferencias en cualquier momento.</p>
+                </div>
+            </div>
+            <div class="cookie-actions">
+                <button id="cookie-reject" class="cookie-button cookie-reject">Solo necesarias</button>
+                <button id="cookie-settings" class="cookie-button cookie-settings">Configurar</button>
+                <button id="cookie-accept" class="cookie-button cookie-accept">Aceptar todas</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Configuración de Cookies -->
+    <div id="cookie-modal" class="cookie-modal hidden">
+        <div class="cookie-modal-content">
+            <div class="cookie-modal-header">
+                <h3>Configuración de Cookies</h3>
+                <button id="cookie-modal-close" class="cookie-modal-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="cookie-modal-body">
+                <div class="cookie-category">
+                    <div class="cookie-category-header">
+                        <h4>Cookies Técnicas (Necesarias)</h4>
+                        <span class="cookie-status required">Siempre activas</span>
+                    </div>
+                    <p>Estas cookies son esenciales para el funcionamiento del sitio web y no se pueden desactivar.</p>
+                </div>
+                <div class="cookie-category">
+                    <div class="cookie-category-header">
+                        <h4>Cookies Funcionales</h4>
+                        <label class="cookie-toggle">
+                            <input type="checkbox" id="functional-cookies" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <p>Nos permiten recordar tus preferencias y mejorar tu experiencia de navegación.</p>
+                </div>
+            </div>
+            <div class="cookie-modal-footer">
+                <button id="cookie-save-settings" class="cookie-button cookie-accept">Guardar configuración</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===================================
+        // GESTIÓN DE COOKIES Y CONSENTIMIENTO
+        // ===================================
+        
+        function setCookie(name, value, days) {
+            const expires = new Date();
+            expires.setTime(expires.getTime() + (days * 24 * 60 * 1000));
+            document.cookie = name + '=' + value + ';expires=' + expires.toUTCString() + ';path=/;SameSite=Lax';
+        }
+
+        function getCookie(name) {
+            const nameEQ = name + "=";
+            const ca = document.cookie.split(';');
+            for(let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
+        function showCookieBanner() {
+            const banner = document.getElementById('cookie-banner');
+            banner.classList.remove('hidden');
+            setTimeout(() => banner.classList.add('show'), 100);
+        }
+
+        function hideCookieBanner() {
+            const banner = document.getElementById('cookie-banner');
+            banner.classList.remove('show');
+            setTimeout(() => banner.classList.add('hidden'), 300);
+        }
+
+        function handleCookieConsent(type) {
+            const consentData = {
+                necessary: true,
+                functional: type === 'accept' || type === 'settings',
+                timestamp: new Date().toISOString(),
+                version: '1.0'
+            };
+
+            setCookie('cookieConsent', JSON.stringify(consentData), 365);
+            
+            if (consentData.functional) {
+                // Activar cookies funcionales
+                setCookie('restaurantPreference', '', 30);
+            }
+
+            hideCookieBanner();
+            console.log('✅ Consentimiento de cookies guardado:', consentData);
+        }
+
+        function showCookieModal() {
+            document.getElementById('cookie-modal').classList.remove('hidden');
+        }
+
+        function hideCookieModal() {
+            document.getElementById('cookie-modal').classList.add('hidden');
+        }
+
+        // ===================================
+        // VALIDACIÓN DE CONSENTIMIENTO EN FORMULARIO
+        // ===================================
+        
+        function validateDataConsent() {
+            const dataConsent = document.getElementById('dataConsent');
+            if (!dataConsent.checked) {
+                showAlert('Debes aceptar la Política de Privacidad para continuar', 'error');
+                dataConsent.focus();
+                return false;
+            }
+            return true;
+        }
+        // Función de prueba para debugging - TEMPORAL
+        function debugTimeValidation() {
+            console.log('=== DEBUG TIME VALIDATION ===');
+            
+            // Simular fecha de mañana
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            const tomorrowStr = tomorrow.toISOString().split('T')[0];
+            
+            console.log('Fecha de hoy:', new Date().toDateString());
+            console.log('Fecha de mañana:', tomorrow.toDateString());
+            console.log('String de mañana:', tomorrowStr);
+            
+            // Simular input de fecha
+            const dateInput = document.getElementById('reservationDate');
+            if (dateInput) {
+                dateInput.value = tomorrowStr;
+                console.log('Valor del input:', dateInput.value);
+            }
+            
+            // Probar horarios específicos
+            const testTimes = [
+                {h: 13, m: 0}, // 13:00
+                {h: 14, m: 0}, // 14:00  
+                {h: 20, m: 0}, // 20:00
+                {h: 22, m: 0}  // 22:00
+            ];
+            
+            testTimes.forEach(time => {
+                const result = isTimeValidForReservation(time.h, time.m);
+                console.log(`${time.h}:${time.m.toString().padStart(2, '0')} para mañana: ${result ? '✅ VÁLIDO' : '❌ BLOQUEADO'}`);
+            });
+            
+            console.log('=== FIN DEBUG ===');
+        }
+        
+        // Variables globales
+        let selectedRestaurant = null;
+        let availableTables = [];
+
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Aplicación iniciada');
+            setMinDate();
+            loadRestaurants();
+            initHeroVideo();
+        });
+
+        // Inicializar video hero
+        function initHeroVideo() {
+            const video = document.querySelector('.hero-video');
+            if (video) {
+                video.setAttribute('data-loaded', 'false');
+                
+                video.addEventListener('loadeddata', function() {
+                    video.setAttribute('data-loaded', 'true');
+                    console.log('🎥 Video hero cargado correctamente');
+                });
+                
+                video.addEventListener('error', function() {
+                    console.log('❌ Error cargando video, usando fondo estático');
+                    // Mostrar fondo estático como fallback
+                    const videoContainer = document.querySelector('.hero-video-container');
+                    if (videoContainer) {
+                        videoContainer.innerHTML = '<div class="hero-background"></div><div class="hero-overlay"></div>';
+                    }
+                });
+            }
+        }
+
+        // Configurar fecha mínima y por defecto
+        function setMinDate() {
+            const today = new Date().toISOString().split('T')[0];
+            const dateInput = document.getElementById('reservationDate');
+            dateInput.min = today;
+            dateInput.value = today; // Establecer fecha por defecto
+        }
+
+        // Scroll suave a reservas
+        function scrollToReservations() {
+            document.getElementById('restaurant-selection').scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+
+        // Cargar restaurantes
+        async function loadRestaurants() {
+            try {
+                console.log('📍 Cargando restaurantes...');
+                const response = await fetch('/api/restaurants');
+                const restaurants = await response.json();
+                
+                const grid = document.getElementById('restaurants-grid');
+                grid.innerHTML = '';
+                
+                restaurants.forEach((restaurant, index) => {
+                    const card = document.createElement('div');
+                    card.className = 'restaurant-card';
+                    card.onclick = (event) => selectRestaurant(restaurant, event);
+                    
+                    // Generar horarios
+                    const scheduleHtml = Object.entries(restaurant.schedule)
+                        .map(([days, hours]) => `
+                            <div class="schedule-item">
+                                <span class="schedule-days">${days}</span>
+                                <span class="schedule-hours">${hours}</span>
+                            </div>
+                        `).join('');
+                    
+                    card.innerHTML = `
+                        <div class="restaurant-card-header">
+                            <h3 class="restaurant-card-title">${restaurant.name}</h3>
+                            <div class="restaurant-card-icon">
+                                <i class="fas fa-store"></i>
+                            </div>
+                        </div>
+                        <p class="restaurant-card-description">Auténtica cocina asiática con ambiente moderno</p>
+                        <div class="restaurant-schedule">
+                            <div class="schedule-title">
+                                <i class="fas fa-clock"></i>
+                                <span>Horarios</span>
+                            </div>
+                            <div class="schedule-list">
+                                ${scheduleHtml}
+                            </div>
+                        </div>
+                        <div class="restaurant-card-availability">
+                            <i class="fas fa-table"></i>
+                            <span>${restaurant.availableTables} mesas disponibles</span>
+                        </div>
+                        <div class="restaurant-card-action">
+                            <span>Seleccionar</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                    `;
+                    
+                    grid.appendChild(card);
+                });
+                
+                console.log(`✅ ${restaurants.length} restaurantes cargados`);
+            } catch (error) {
+                console.error('❌ Error cargando restaurantes:', error);
+                showAlert('Error al cargar los restaurantes', 'error');
+            }
+        }
+
+        // Seleccionar restaurante
+        async function selectRestaurant(restaurant, event) {
+            console.log('🏪 Restaurante seleccionado:', restaurant);
+            
+            try {
+                // Cargar datos completos del restaurante incluyendo horarios
+                console.log('📥 Cargando datos completos del restaurante...');
+                const response = await fetch(`/api/restaurants/${restaurant.id}/details`);
+                if (!response.ok) {
+                    throw new Error(`Error cargando detalles: ${response.status}`);
+                }
+                
+                const fullRestaurantData = await response.json();
+                selectedRestaurant = { ...restaurant, ...fullRestaurantData };
+                console.log('✅ Datos completos cargados:', selectedRestaurant);
+                
+                // Verificar que tenemos el formato correcto de horarios
+                if (!selectedRestaurant.schedule || typeof selectedRestaurant.schedule.monday === 'undefined') {
+                    console.error('❌ Formato de horarios incorrecto:', selectedRestaurant.schedule);
+                    throw new Error('Formato de datos del restaurante incorrecto');
+                }
+                
+            } catch (error) {
+                console.error('❌ Error cargando datos completos del restaurante:', error);
+                showAlert('Error al cargar los datos del restaurante. Inténtalo de nuevo.', 'error');
+                return; // No continuar si no podemos cargar los datos correctos
+            }
+            
+            // Actualizar UI
+            document.querySelectorAll('.restaurant-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            if (event && event.currentTarget) {
+                event.currentTarget.classList.add('selected');
+            }
+            
+            // Cambiar a formulario
+            document.getElementById('selected-restaurant-name').textContent = restaurant.name;
+            document.getElementById('restaurant-selection').classList.add('hidden');
+            document.getElementById('reservation-form').classList.remove('hidden');
+            
+            // Scroll al formulario
+            document.getElementById('reservation-form').scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+            
+            // Cargar mesas y generar horarios
+            await loadTables();
+            generateTimeOptions();
+        }
+
+        // Variables para debounce
+        let loadTablesTimeout = null;
+        
+        // Función debounced para cargar mesas
+        function debouncedLoadTables() {
+            if (loadTablesTimeout) {
+                clearTimeout(loadTablesTimeout);
+            }
+            
+            loadTablesTimeout = setTimeout(async () => {
+                await loadTables();
+            }, 300); // Esperar 300ms antes de ejecutar
+        }
+        
+        // Cargar mesas disponibles
+        async function loadTables() {
+            if (!selectedRestaurant) return;
+            
+            try {
+                console.log('🪑 Cargando mesas para:', selectedRestaurant.name);
+                
+                // Obtener fecha y hora seleccionadas
+                const dateInput = document.getElementById('reservationDate');
+                const timeSelect = document.getElementById('reservationTime');
+                const guestsSelect = document.getElementById('guests');
+                const selectedDate = dateInput.value;
+                const selectedTime = timeSelect.value;
+                const selectedGuests = guestsSelect.value;
+                
+                // Construir URL con parámetros de fecha y hora si están disponibles
+                let url = `/api/restaurants/${selectedRestaurant.id}/tables`;
+                if (selectedDate && selectedTime) {
+                    url += `?date=${selectedDate}&time=${selectedTime}`;
+                    if (selectedGuests) {
+                        url += `&guests=${selectedGuests}`;
+                    }
+                    console.log('🕒 Validando disponibilidad para:', selectedDate, selectedTime, 'con', selectedGuests, 'comensales');
+                }
+                
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                // Verificar si las mesas están bloqueadas por restricciones de horario
+                if (data.blocked) {
+                    console.log('🚫 Mesas bloqueadas:', data.reason);
+                    availableTables = [];
+                    updateTableSelect();
+                    
+                    // Mostrar mensaje explicativo más detallado
+                    const tableSelect = document.getElementById('tableSelect');
+                    const message = formatBlockedMessage(data);
+                    tableSelect.innerHTML = `<option value="">❌ ${message}</option>`;
+                    
+                    // Mostrar alerta visual prominente
+                    showTimeBlockedAlert(data);
+                    return;
+                }
+                
+                // Si no hay bloqueo, usar las mesas normalmente
+                availableTables = Array.isArray(data) ? data : data.tables || [];
+                console.log('✅ Mesas cargadas:', availableTables.length);
+                updateTableSelect();
+            } catch (error) {
+                console.error('❌ Error cargando mesas:', error);
+                showAlert('Error al cargar las mesas disponibles', 'error');
+            }
+        }
+
+        // Actualizar select de mesas
+        function updateTableSelect() {
+            const guestsSelect = document.getElementById('guests');
+            const tableSelect = document.getElementById('tableSelect');
+            const guests = parseInt(guestsSelect.value);
+            
+            tableSelect.innerHTML = '<option value="">Selecciona una mesa</option>';
+            
+            if (guests && availableTables.length > 0) {
+                const suitableTables = availableTables.filter(table => table.capacity >= guests);
+                
+                if (suitableTables.length === 0) {
+                    tableSelect.innerHTML = '<option value="">No hay mesas disponibles para este número de comensales</option>';
+                } else {
+                    suitableTables.forEach(table => {
+                        const option = document.createElement('option');
+                        option.value = table.id;
+                        option.textContent = `${table.name || `Mesa ${table.id}`} (capacidad: ${table.capacity} personas)`;
+                        tableSelect.appendChild(option);
+                    });
+                }
+            } else if (!guests) {
+                tableSelect.innerHTML = '<option value="">Primero selecciona comensales</option>';
+            }
+        }
+
+        // Función global para actualizar opciones de tiempo
+        function updateTimeOptions() {
+            const timeSelect = document.getElementById('reservationTime');
+            const dateInput = document.getElementById('reservationDate');
+            
+            if (!selectedRestaurant || !selectedRestaurant.schedule) {
+                console.error('❌ No hay restaurante seleccionado o no tiene horarios detallados');
+                timeSelect.innerHTML = '<option value="">Error: datos del restaurante no disponibles</option>';
+                return;
+            }
+            
+            const selectedDate = new Date(dateInput.value + 'T00:00:00'); // Forzar hora local consistente
+            const dayOfWeek = selectedDate.getDay(); // 0 = Domingo, 1 = Lunes, etc.
+            
+            // Mapear días de la semana al formato inglés usado en los datos detallados
+            const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+            const selectedDayKey = dayNames[dayOfWeek];
+            const dayNamesEs = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+            const selectedDayName = dayNamesEs[dayOfWeek];
+            
+            console.log('📅 Fecha seleccionada:', dateInput.value, '- Día:', selectedDayName, '- Key:', selectedDayKey);
+            
+            // Obtener el horario del día desde los datos detallados
+            const daySchedule = selectedRestaurant.schedule[selectedDayKey];
+            
+            console.log('🕒 Horario del día:', daySchedule);
+            
+            // Limpiar opciones existentes
+            timeSelect.innerHTML = '<option value="">Selecciona una hora</option>';
+            
+            if (!daySchedule || daySchedule.closed === true) {
+                timeSelect.innerHTML = '<option value="">Restaurante cerrado este día</option>';
+                return;
+            }
+            
+            // Usar directamente los datos detallados
+            if (daySchedule.open && daySchedule.close) {
+                const timeRange = {
+                    start: { hour: parseInt(daySchedule.open.split(':')[0]), minute: parseInt(daySchedule.open.split(':')[1]) },
+                    end: { hour: parseInt(daySchedule.close.split(':')[0]), minute: parseInt(daySchedule.close.split(':')[1]) }
+                };
+                
+                const allTimeSlots = generateTimeSlots(timeRange.start, timeRange.end);
+                
+                console.log('🕐 Slots generados:', allTimeSlots.length, 'slots');
+                
+                // NUEVO: Filtrar slots según fecha seleccionada
+                allTimeSlots.forEach(timeString => {
+                    const [hourStr, minuteStr] = timeString.split(':');
+                    const hour = parseInt(hourStr);
+                    const minute = parseInt(minuteStr);
+                    
+                    // Aplicar validaciones específicas para la fecha seleccionada
+                    if (isTimeValidForReservation(hour, minute)) {
+                        const option = document.createElement('option');
+                        option.value = timeString;
+                        option.textContent = timeString;
+                        timeSelect.appendChild(option);
+                    } else {
+                        console.log(`🚫 Filtrado horario: ${timeString} para fecha ${dateInput.value}`);
+                    }
+                });
+            } else {
+                console.error('❌ Horario mal formateado:', daySchedule);
+                timeSelect.innerHTML = '<option value="">Error en los horarios del restaurante</option>';
+            }
+        }
+
+        // Función para generar opciones de horario (inicialización)
+        function generateTimeOptions() {
+            const timeSelect = document.getElementById('reservationTime');
+            const dateInput = document.getElementById('reservationDate');
+            
+            // Generar opciones iniciales si hay fecha
+            if (dateInput.value) {
+                updateTimeOptions();
+            }
+        }
+
+        // Verificar si un día está incluido en un rango de horario
+        function isDayInSchedule(dayName, scheduleRange) {
+            // Normalizar nombres de días para comparación
+            const dayMap = {
+                'lunes': ['lun', 'monday', 'lunes'],
+                'martes': ['mar', 'tuesday', 'martes'],
+                'miércoles': ['mié', 'wednesday', 'miércoles', 'mie'],
+                'jueves': ['jue', 'thursday', 'jueves'],
+                'viernes': ['vie', 'friday', 'viernes'],
+                'sábado': ['sáb', 'saturday', 'sábado', 'sab', 'sabado'],
+                'domingo': ['dom', 'sunday', 'domingo']
+            };
+            
+            const normalizedDay = dayName.toLowerCase();
+            const normalizedRange = scheduleRange.toLowerCase();
+            
+            // Verificar coincidencia exacta
+            if (normalizedRange.includes(normalizedDay)) {
+                return true;
+            }
+            
+            // Verificar abreviaciones
+            const dayAbbrevs = dayMap[normalizedDay] || [];
+            for (const abbrev of dayAbbrevs) {
+                if (normalizedRange.includes(abbrev)) {
+                    return true;
+                }
+            }
+            
+            // Verificar rangos (ej: "lun - vie", "dom - jue")
+            if (normalizedRange.includes(' - ')) {
+                const [startDay, endDay] = normalizedRange.split(' - ').map(d => d.trim());
+                return isDayInRange(normalizedDay, startDay, endDay);
+            }
+            
+            return false;
+        }
+
+        // Verificar si un día está en un rango
+        function isDayInRange(day, startDay, endDay) {
+            const weekDays = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
+            const dayAbbrevMap = {
+                'dom': 'domingo', 'lun': 'lunes', 'mar': 'martes', 'mié': 'miércoles', 'mie': 'miércoles',
+                'jue': 'jueves', 'vie': 'viernes', 'sáb': 'sábado', 'sab': 'sábado'
+            };
+            
+            // Normalizar nombres
+            const normalizeDay = (d) => dayAbbrevMap[d] || d;
+            const normalizedDay = normalizeDay(day);
+            const normalizedStart = normalizeDay(startDay);
+            const normalizedEnd = normalizeDay(endDay);
+            
+            const dayIndex = weekDays.indexOf(normalizedDay);
+            const startIndex = weekDays.indexOf(normalizedStart);
+            const endIndex = weekDays.indexOf(normalizedEnd);
+            
+            if (dayIndex === -1 || startIndex === -1 || endIndex === -1) {
+                return false;
+            }
+            
+            // Manejar rangos que cruzan la semana (ej: vie - lun)
+            if (startIndex <= endIndex) {
+                return dayIndex >= startIndex && dayIndex <= endIndex;
+            } else {
+                return dayIndex >= startIndex || dayIndex <= endIndex;
+            }
+        }
+
+        // Parsear rango de horario
+        function parseTimeRange(timeString) {
+            const match = timeString.match(/(\d{1,2}):(\d{2})\s*-\s*(\d{1,2}):(\d{2})/);
+            if (!match) return null;
+            
+            const [, startHour, startMin, endHour, endMin] = match;
+            return {
+                start: { hour: parseInt(startHour), minute: parseInt(startMin) },
+                end: { hour: parseInt(endHour), minute: parseInt(endMin) }
+            };
+        }
+
+        // Generar slots de tiempo cada 30 minutos con restricciones de reserva
+        function generateTimeSlots(start, end) {
+            const slots = [];
+            let current = { hour: start.hour, minute: start.minute };
+            
+            // Si el horario termina después de medianoche (ej: 24:00 o 00:30)
+            let endHour = end.hour;
+            if (endHour === 0 || (endHour < start.hour && endHour < 6)) {
+                endHour += 24;
+            }
+            
+            while (current.hour < endHour || (current.hour === endHour && current.minute <= end.minute)) {
+                const displayHour = current.hour > 23 ? current.hour - 24 : current.hour;
+                const timeString = `${displayHour.toString().padStart(2, '0')}:${current.minute.toString().padStart(2, '0')}`;
+                
+                // CAMBIO: No filtrar aquí, generar todos los slots del horario del restaurante
+                // El filtrado se hará cuando el usuario seleccione una fecha específica
+                slots.push(timeString);
+                
+                // Avanzar 30 minutos
+                current.minute += 30;
+                if (current.minute >= 60) {
+                    current.minute = 0;
+                    current.hour++;
+                }
+            }
+            
+            return slots;
+        }
+
+        // Verificar si una hora es válida para reservas según las restricciones
+        function isTimeValidForReservation(hour, minute) {
+            // Obtener fecha seleccionada
+            const dateInput = document.getElementById('reservationDate');
+            if (!dateInput || !dateInput.value) {
+                return true; // Si no hay fecha seleccionada, mostrar todas las horas
+            }
+            
+            const selectedDate = new Date(dateInput.value + 'T00:00:00'); // Forzar hora local
+            const now = new Date();
+            
+            // Obtener datos de la fecha actual (sin hora para comparación limpia)
+            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            const reservationDay = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate());
+            
+            const timeString = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+            
+            // VALIDACIÓN 1: Verificar horarios del restaurante (aplica para todos los días)
+            if (selectedRestaurant && selectedRestaurant.schedule) {
+                const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+                const dayOfWeek = dayNames[selectedDate.getDay()];
+                const daySchedule = selectedRestaurant.schedule[dayOfWeek];
+                
+                // DEBUG: Solo log para el primer horario para reducir ruido
+                if (hour === 13 && minute === 0) {
+                    console.log(`� Validando fecha ${dateInput.value} (${dayOfWeek})`);
+                    console.log(`🔍 ¿Es día futuro?: ${reservationDay > today}`);
+                    console.log(`📋 Horario restaurante: ${daySchedule?.open}-${daySchedule?.close}`);
+                }
+                
+                if (!daySchedule || daySchedule.closed === true) {
+                    return false; // Restaurante cerrado este día
+                }
+                
+                if (daySchedule.open && daySchedule.close) {
+                    const reservationTime = hour + (minute / 60);
+                    
+                    // CORRECCIÓN: Parsing correcto de horarios
+                    const [openHour, openMin] = daySchedule.open.split(':').map(Number);
+                    const [closeHour, closeMin] = daySchedule.close.split(':').map(Number);
+                    const openTime = openHour + (openMin / 60);
+                    const closeTime = closeHour + (closeMin / 60);
+                    
+                    // Verificar que esté dentro del horario del restaurante
+                    if (reservationTime < openTime || reservationTime > closeTime) {
+                        return false; // Fuera del horario del restaurante
+                    }
+                } else {
+                    console.warn(`⚠️ Horario mal formateado para ${dayOfWeek}:`, daySchedule);
+                    return false;
+                }
+            }
+            
+            // VALIDACIÓN 2: Si la reserva es para un día futuro, permitir todo el horario del restaurante
+            if (reservationDay > today) {
+                return true; // ✅ DÍAS FUTUROS: Permitir todo el horario del restaurante
+            }
+            
+            // VALIDACIÓN 3: Si la reserva es para hoy, aplicar restricciones adicionales
+            if (reservationDay.getTime() === today.getTime()) {
+                const currentTime = now.getHours() + (now.getMinutes() / 60);
+                const reservationTime = hour + (minute / 60);
+                
+                // No permitir horas que ya pasaron hoy
+                if (reservationTime <= currentTime) {
+                    return false; // Hora ya pasó
+                }
+                
+                // Configuración de servicios (igual que en el backend)
+                const SERVICE_SCHEDULE = {
+                    lunch: {
+                        startTime: 13.00, // 13:00
+                        endTime: 15.00    // 15:00
+                    },
+                    dinner: {
+                        startTime: 20.30, // 20:30
+                        endTime: 22.00    // 22:00
+                    }
+                };
+                
+                // Determinar qué servicio corresponde a esta hora
+                let service = null;
+                if (reservationTime >= SERVICE_SCHEDULE.lunch.startTime && reservationTime <= SERVICE_SCHEDULE.lunch.endTime) {
+                    service = 'lunch';
+                } else if (reservationTime >= SERVICE_SCHEDULE.dinner.startTime && reservationTime <= SERVICE_SCHEDULE.dinner.endTime) {
+                    service = 'dinner';
+                }
+                
+                // Si está dentro de un servicio definido, verificar si estamos EN EL SERVICIO AHORA
+                if (service) {
+                    const serviceStartTime = SERVICE_SCHEDULE[service].startTime;
+                    const serviceEndTime = SERVICE_SCHEDULE[service].endTime;
+                    
+                    // Si estamos ACTUALMENTE DENTRO del período de servicio, bloquear
+                    if (currentTime >= serviceStartTime && currentTime <= serviceEndTime) {
+                        return false; // Estamos dentro del servicio actual
+                    }
+                }
+                
+                return true; // Día actual - horario válido que no interfiere con servicio actual
+            }
+            
+            // VALIDACIÓN 4: Si la reserva es para el pasado, no permitir
+            if (reservationDay < today) {
+                return false; // Fecha en el pasado
+            }
+            
+            // Caso por defecto (no debería llegar aquí)
+            return true;
+        }
+
+        // Event listeners
+        document.getElementById('guests').addEventListener('change', updateTableSelect);
+        
+        // Actualizar mesas disponibles cuando cambien fecha o hora
+        document.getElementById('reservationDate').addEventListener('change', async function() {
+            console.log('📅 Fecha cambió, actualizando mesas...');
+            updateTimeOptions(); // Actualizar opciones de hora
+            debouncedLoadTables(); // Recargar mesas disponibles con debounce
+        });
+        
+        document.getElementById('reservationTime').addEventListener('change', async function() {
+            console.log('🕒 Hora cambió, actualizando mesas...');
+            debouncedLoadTables(); // Recargar mesas disponibles con debounce
+        });
+
+        // Manejar envío del formulario
+        document.getElementById('reservationForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            console.log('📝 Enviando formulario...');
+            
+            // Validar campos básicos
+            const name = document.getElementById('customerName').value.trim();
+            const phone = document.getElementById('customerPhone').value.trim();
+            const date = document.getElementById('reservationDate').value;
+            const time = document.getElementById('reservationTime').value;
+            const guests = document.getElementById('guests').value;
+            const tableId = document.getElementById('tableSelect').value;
+            
+            if (!name || !phone || !date || !time || !guests || !tableId) {
+                showAlert('Por favor, completa todos los campos obligatorios', 'error');
+                return;
+            }
+            
+            // Validar que la fecha no sea en el pasado
+            const today = new Date().toISOString().split('T')[0];
+            if (date < today) {
+                showAlert('No puedes hacer reservas para fechas pasadas', 'error');
+                return;
+            }
+            
+            // Validar formato de teléfono (básico)
+            const phoneRegex = /^[0-9+\-\s()]{9,15}$/;
+            if (!phoneRegex.test(phone)) {
+                showAlert('Por favor, introduce un número de teléfono válido', 'error');
+                return;
+            }
+            
+            // Validar email si se proporciona
+            const email = document.getElementById('customerEmail').value.trim();
+            if (email) {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email)) {
+                    showAlert('Por favor, introduce una dirección de email válida', 'error');
+                    return;
+                }
+            }
+            
+            if (!selectedRestaurant) {
+                showAlert('Error: No hay restaurante seleccionado', 'error');
+                return;
+            }
+            
+            // Validar consentimiento de protección de datos
+            if (!validateDataConsent()) {
+                return;
+            }
+            
+            // Recopilar consentimientos para logging
+            const marketingConsent = document.getElementById('marketingConsent').checked;
+            console.log('📋 Consentimientos registrados:', {
+                dataProcessing: true, // Requerido para continuar
+                marketing: marketingConsent,
+                timestamp: new Date().toISOString()
+            });
+            
+            // UI loading
+            const submitBtn = document.querySelector('.submit-button');
+            const submitText = document.getElementById('submit-text');
+            const submitLoading = document.getElementById('submit-loading');
+            
+            submitText.classList.add('hidden');
+            submitLoading.classList.remove('hidden');
+            submitBtn.disabled = true;
+            
+            // Datos del formulario
+            const formData = {
+                restaurant: selectedRestaurant.id,
+                tableId: parseInt(tableId),
+                customerName: name,
+                customerPhone: phone,
+                customerEmail: document.getElementById('customerEmail').value,
+                date: date,
+                time: time,
+                guests: parseInt(guests),
+                // Consentimientos para cumplimiento RGPD
+                consents: {
+                    dataProcessing: true, // Requerido para procesar la reserva
+                    marketing: marketingConsent,
+                    timestamp: new Date().toISOString(),
+                    version: '1.0'
+                }
+            };
+            
+            console.log('📤 Enviando datos:', formData);
+            
+            try {
+                const response = await fetch('/api/reservations', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                console.log('📡 Respuesta del servidor:', response.status);
+                
+                const result = await response.json();
+                console.log('📄 Contenido de respuesta:', result);
+                
+                if (!response.ok) {
+                    throw new Error(result.error || `Error HTTP: ${response.status}`);
+                }
+                
+                console.log('✅ Reserva exitosa:', result);
+                
+                // Actualizar lista de mesas disponibles
+                await loadTables();
+                
+                // Mostrar confirmación
+                showConfirmation(result.reservation, result.emailSent, result.spamWarning);
+                
+            } catch (error) {
+                console.error('❌ Error en reserva:', error);
+                showAlert('Error al realizar la reserva. Inténtalo de nuevo.', 'error');
+            } finally {
+                // Restaurar botón
+                submitText.classList.remove('hidden');
+                submitLoading.classList.add('hidden');
+                submitBtn.disabled = false;
+            }
+        });
+
+        // Mostrar confirmación
+        function showConfirmation(reservation, emailSent, spamWarning) {
+            console.log('🎉 Mostrando confirmación');
+            
+            document.getElementById('reservation-form').classList.add('hidden');
+            document.getElementById('confirmation').classList.remove('hidden');
+            
+            const details = document.getElementById('reservation-details');
+            const emailStatus = emailSent ? 
+                '<p style="color: #16a34a;">✅ Email de confirmación enviado</p>' : 
+                '<p style="color: #d97706;">⚠️ No se pudo enviar email de confirmación</p>';
+            
+            const spamMessage = (emailSent && spamWarning) ? 
+                `<p style="color: #f59e0b; background: #fef3c7; padding: 10px; border-radius: 5px; margin-top: 10px;">
+                    📧 ${spamWarning}
+                </p>` : '';
+            
+            details.innerHTML = `
+                <p><strong>Restaurante:</strong> ${reservation.restaurant}</p>
+                <p><strong>Fecha:</strong> ${new Date(reservation.date).toLocaleDateString('es-ES')}</p>
+                <p><strong>Hora:</strong> ${reservation.time}</p>
+                <p><strong>Comensales:</strong> ${reservation.guests}</p>
+                <p><strong>Número de reserva:</strong> #${reservation.id}</p>
+                ${emailStatus}
+                ${spamMessage}
+            `;
+            
+            // Scroll a confirmación
+            document.getElementById('confirmation').scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+
+        // Volver atrás
+        function goBack() {
+            document.getElementById('reservation-form').classList.add('hidden');
+            document.getElementById('restaurant-selection').classList.remove('hidden');
+            selectedRestaurant = null;
+            
+            // Limpiar selección
+            document.querySelectorAll('.restaurant-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            // Reset formulario y opciones de horario
+            document.getElementById('reservationForm').reset();
+            document.getElementById('reservationTime').innerHTML = '<option value="">Selecciona una hora</option>';
+        }
+
+        // Nueva reserva
+        function newReservation() {
+            document.getElementById('confirmation').classList.add('hidden');
+            document.getElementById('restaurant-selection').classList.remove('hidden');
+            selectedRestaurant = null;
+            
+            // Limpiar y resetear
+            document.querySelectorAll('.restaurant-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            document.getElementById('reservationForm').reset();
+            document.getElementById('reservationTime').innerHTML = '<option value="">Selecciona una hora</option>';
+            
+            // Scroll al top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Sistema de alertas
+        function showAlert(message, type = 'error') {
+            // Remover alertas existentes
+            document.querySelectorAll('.alert').forEach(alert => alert.remove());
+            
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            
+            const iconMap = {
+                'error': 'fas fa-exclamation-triangle',
+                'success': 'fas fa-check-circle',
+                'warning': 'fas fa-exclamation-circle',
+                'info': 'fas fa-info-circle'
+            };
+            
+            alert.innerHTML = `
+                <div class="alert-content">
+                    <i class="${iconMap[type]}"></i>
+                    <span class="alert-message">${message}</span>
+                    <button class="alert-close" onclick="this.parentElement.parentElement.remove()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+            
+            // Insertar en container activo
+            const activeSection = document.querySelector('.section:not(.hidden)') || document.querySelector('.main-content');
+            const container = activeSection.querySelector('.container');
+            container.insertBefore(alert, container.firstChild);
+            
+            // Auto-remover
+            setTimeout(() => {
+                if (alert.parentElement) {
+                    alert.remove();
+                }
+            }, 5000);
+        }
+
+        // Formatear mensaje cuando las mesas están bloqueadas
+        function formatBlockedMessage(data) {
+            switch (data.reason) {
+                case 'Servicio en curso':
+                    return `Servicio ${data.currentService} en curso - No disponible`;
+                case 'Hora ya pasada':
+                    return `Esta hora ya ha pasado - Elige un horario posterior`;
+                case 'Restaurante cerrado':
+                    return `Restaurante cerrado este día`;
+                case 'Fuera del horario':
+                    return `Fuera del horario de funcionamiento`;
+                default:
+                    return data.message || 'No disponible en este horario';
+            }
+        }
+
+        // Mostrar alerta visual prominente cuando el horario está bloqueado
+        function showTimeBlockedAlert(data) {
+            // Remover alerta anterior si existe
+            const existingAlert = document.querySelector('.time-blocked-alert');
+            if (existingAlert) {
+                existingAlert.remove();
+            }
+
+            // Crear nueva alerta
+            const alertDiv = document.createElement('div');
+            alertDiv.className = 'time-blocked-alert';
+            
+            let icon = '⏰';
+            let title = 'Horario no disponible';
+            let explanation = '';
+            
+            switch (data.reason) {
+                case 'Servicio en curso':
+                    icon = '🍽️';
+                    title = `${data.currentService} en curso`;
+                    explanation = `Lo sentimos, el ${data.currentService.toLowerCase()} ya ha comenzado y no se pueden hacer más reservas para este servicio. Puedes reservar para cuando termine el servicio o para mañana.`;
+                    break;
+                case 'Hora ya pasada':
+                    icon = '⏰';
+                    title = 'Esta hora ya ha pasado';
+                    explanation = `No puedes reservar para las ${getSelectedTime()} porque esa hora ya ha pasado. Selecciona un horario posterior de hoy o reserva para mañana.`;
+                    break;
+                case 'Restaurante cerrado':
+                    icon = '🔒';
+                    title = 'Restaurante cerrado';
+                    explanation = data.message;
+                    break;
+                case 'Fuera del horario':
+                    icon = '🕐';
+                    title = 'Fuera del horario';
+                    explanation = data.message;
+                    break;
+                default:
+                    explanation = data.message;
+            }
+            
+            alertDiv.innerHTML = `
+                <div class="alert-content">
+                    <div class="alert-icon">${icon}</div>
+                    <div class="alert-text">
+                        <h4>${title}</h4>
+                        <p>${explanation}</p>
+                    </div>
+                    <button class="alert-close" onclick="this.parentElement.parentElement.remove()">×</button>
+                </div>
+            `;
+            
+            // Insertar después del selector de hora
+            const timeContainer = document.querySelector('.time-selector-container') || document.getElementById('reservationTime').parentElement;
+            timeContainer.insertAdjacentElement('afterend', alertDiv);
+        }
+
+        // Función auxiliar para obtener la hora seleccionada
+        function getSelectedTime() {
+            const timeInput = document.getElementById('reservationTime');
+            return timeInput ? timeInput.value : '';
+        }
+
+        // ===================================
+        // INICIALIZACIÓN DE COOKIES Y CONSENTIMIENTO
+        // ===================================
+        
+        // Event listeners para cookies (se agregan al DOMContentLoaded existente)
+        document.addEventListener('DOMContentLoaded', function() {
+            // Verificar si ya hay consentimiento
+            const consent = getCookie('cookieConsent');
+            if (!consent) {
+                setTimeout(showCookieBanner, 1000); // Mostrar después de 1 segundo
+            }
+
+            // Botones del banner
+            document.getElementById('cookie-accept').addEventListener('click', () => {
+                handleCookieConsent('accept');
+            });
+
+            document.getElementById('cookie-reject').addEventListener('click', () => {
+                handleCookieConsent('reject');
+            });
+
+            document.getElementById('cookie-settings').addEventListener('click', () => {
+                showCookieModal();
+            });
+
+            // Modal de configuración
+            document.getElementById('cookie-modal-close').addEventListener('click', hideCookieModal);
+            
+            document.getElementById('cookie-save-settings').addEventListener('click', () => {
+                const functionalEnabled = document.getElementById('functional-cookies').checked;
+                handleCookieConsent(functionalEnabled ? 'accept' : 'reject');
+                hideCookieModal();
+            });
+
+            // Cerrar modal al hacer clic fuera
+            document.getElementById('cookie-modal').addEventListener('click', (e) => {
+                if (e.target.id === 'cookie-modal') {
+                    hideCookieModal();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
