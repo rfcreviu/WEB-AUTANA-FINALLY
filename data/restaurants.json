@@ -1,0 +1,554 @@
+{
+  "alisios": {
+    "name": "UDON CC ALISIOS",
+    "schedule": {
+      "monday": {
+        "open": "13:00",
+        "close": "22:00",
+        "closed": false
+      },
+      "tuesday": {
+        "open": "13:00",
+        "close": "22:00",
+        "closed": false
+      },
+      "wednesday": {
+        "open": "13:00",
+        "close": "22:00",
+        "closed": false
+      },
+      "thursday": {
+        "open": "13:00",
+        "close": "22:00",
+        "closed": false
+      },
+      "friday": {
+        "open": "13:00",
+        "close": "23:00",
+        "closed": false
+      },
+      "saturday": {
+        "open": "16:00",
+        "close": "23:00",
+        "closed": false
+      },
+      "sunday": {
+        "open": "13:00",
+        "close": "22:00",
+        "closed": false
+      }
+    },
+    "admin": {
+      "username": "admin_alisios",
+      "password": "$2a$10$ANQiD/uyuXE/jNAfrU1H9OOyFdWuh3afyzS9JYcsMun42SL0RQCRi"
+    },
+    "tables": [
+      {
+        "id": 1,
+        "name": "Mesa 105",
+        "capacity": 5,
+        "available": true
+      },
+      {
+        "id": 2,
+        "name": "Mesa 106",
+        "capacity": 4,
+        "available": false
+      },
+      {
+        "id": 3,
+        "name": "Mesa 107",
+        "capacity": 5,
+        "available": true
+      },
+      {
+        "id": 4,
+        "name": "Mesa 108",
+        "capacity": 5,
+        "available": true
+      },
+      {
+        "id": 5,
+        "name": "Mesa 15",
+        "capacity": 4,
+        "available": true
+      },
+      {
+        "id": 6,
+        "name": "Mesa 18",
+        "capacity": 4,
+        "available": true
+      },
+      {
+        "id": 7,
+        "name": "Mesa 20",
+        "capacity": 4,
+        "available": true
+      },
+      {
+        "id": 8,
+        "name": "Mesa 21",
+        "capacity": 4,
+        "available": true
+      },
+      {
+        "id": 9,
+        "name": "Mesa 24",
+        "capacity": 4,
+        "available": true
+      },
+      {
+        "id": 10,
+        "name": "Mesa 26",
+        "capacity": 4,
+        "available": true
+      },
+      {
+        "id": 11,
+        "name": "Mesa 27",
+        "capacity": 4,
+        "available": true
+      },
+      {
+        "id": 12,
+        "name": "Mesa 30",
+        "capacity": 4,
+        "available": true
+      },
+      {
+        "id": 13,
+        "name": "Mesa 32",
+        "capacity": 4,
+        "available": true
+      },
+      {
+        "id": 14,
+        "name": "Terraza 301",
+        "capacity": 4,
+        "available": true
+      },
+      {
+        "id": 15,
+        "name": "Terraza 304",
+        "capacity": 4,
+        "available": true
+      },
+      {
+        "id": 16,
+        "name": "Terraza 308",
+        "capacity": 6,
+        "available": true
+      },
+      {
+        "id": 17,
+        "name": "Terraza 310",
+        "capacity": 4,
+        "available": true
+      },
+      {
+        "id": 18,
+        "name": "Terraza 312",
+        "capacity": 4,
+        "available": true
+      },
+      {
+        "id": 19,
+        "name": "Terraza 313",
+        "capacity": 4,
+        "available": true
+      },
+      {
+        "id": 20,
+        "name": "Terraza 314",
+        "capacity": 4,
+        "available": true
+      },
+      {
+        "id": 21,
+        "name": "Terraza 316",
+        "capacity": 6,
+        "available": true
+      },
+      {
+        "id": 22,
+        "name": "Terraza 318",
+        "capacity": 2,
+        "available": true
+      },
+      {
+        "id": 23,
+        "name": "Terraza 320",
+        "capacity": 4,
+        "available": true
+      },
+      {
+        "id": 24,
+        "name": "Terraza 322",
+        "capacity": 4,
+        "available": true
+      },
+      {
+        "id": 25,
+        "name": "Terraza 330",
+        "capacity": 2,
+        "available": true
+      },
+      {
+        "id": 26,
+        "name": "Mesa 40",
+        "capacity": 12,
+        "available": true
+      }
+    ]
+  },
+  "meridiano": {
+    "name": "UDON CC MERIDIANO",
+    "schedule": {
+      "monday": {
+        "open": "11:30",
+        "close": "23:30",
+        "closed": false
+      },
+      "tuesday": {
+        "open": "11:30",
+        "close": "23:30",
+        "closed": false
+      },
+      "wednesday": {
+        "open": "11:30",
+        "close": "23:30",
+        "closed": false
+      },
+      "thursday": {
+        "open": "11:30",
+        "close": "23:30",
+        "closed": false
+      },
+      "friday": {
+        "open": "11:30",
+        "close": "23:30",
+        "closed": false
+      },
+      "saturday": {
+        "open": "11:30",
+        "close": "23:30",
+        "closed": false
+      },
+      "sunday": {
+        "open": "11:30",
+        "close": "23:30",
+        "closed": false
+      }
+    },
+    "admin": {
+      "username": "admin_meridiano",
+      "password": "$2a$10$3kSut4epXHYNh6B8wf9m.OQnkQFvYH0N2hmtbEnB5jsdy6FC93fSu"
+    },
+    "tables": [
+      {
+        "id": 1,
+        "name": "Sala Principal 1",
+        "capacity": 4,
+        "available": true
+      },
+      {
+        "id": 2,
+        "name": "Sala Principal 2",
+        "capacity": 2,
+        "available": true
+      },
+      {
+        "id": 3,
+        "name": "Zona VIP",
+        "capacity": 6,
+        "available": true
+      },
+      {
+        "id": 4,
+        "name": "Entrada Derecha",
+        "capacity": 4,
+        "available": false
+      },
+      {
+        "id": 5,
+        "name": "Entrada Izquierda",
+        "capacity": 2,
+        "available": false
+      },
+      {
+        "id": 6,
+        "name": "Privado A",
+        "capacity": 8,
+        "available": true
+      },
+      {
+        "id": 7,
+        "name": "Privado B",
+        "capacity": 6,
+        "available": true
+      },
+      {
+        "id": 8,
+        "name": "Barra Alta 1",
+        "capacity": 2,
+        "available": true
+      },
+      {
+        "id": 9,
+        "name": "Barra Alta 2",
+        "capacity": 2,
+        "available": true
+      },
+      {
+        "id": 10,
+        "name": "Centro 1",
+        "capacity": 4,
+        "available": true
+      },
+      {
+        "id": 11,
+        "name": "Centro 2",
+        "capacity": 4,
+        "available": true
+      },
+      {
+        "id": 12,
+        "name": "Mesa 12",
+        "capacity": 3,
+        "available": true
+      },
+      {
+        "id": 13,
+        "name": "Mesa 13",
+        "capacity": 4,
+        "available": true
+      },
+      {
+        "id": 14,
+        "name": "Mesa 14",
+        "capacity": 2,
+        "available": true
+      },
+      {
+        "id": 15,
+        "name": "Mesa 15",
+        "capacity": 5,
+        "available": true
+      },
+      {
+        "id": 16,
+        "name": "Mesa 16",
+        "capacity": 3,
+        "available": true
+      },
+      {
+        "id": 17,
+        "name": "Mesa 17",
+        "capacity": 4,
+        "available": true
+      },
+      {
+        "id": 18,
+        "name": "Mesa 18",
+        "capacity": 2,
+        "available": true
+      },
+      {
+        "id": 19,
+        "name": "Mesa 19",
+        "capacity": 6,
+        "available": true
+      },
+      {
+        "id": 20,
+        "name": "Mesa 20",
+        "capacity": 4,
+        "available": true
+      },
+      {
+        "id": 21,
+        "name": "Mesa 21",
+        "capacity": 3,
+        "available": true
+      },
+      {
+        "id": 22,
+        "name": "Mesa 22",
+        "capacity": 2,
+        "available": true
+      },
+      {
+        "id": 23,
+        "name": "Mesa 23",
+        "capacity": 5,
+        "available": true
+      },
+      {
+        "id": 24,
+        "name": "Mesa 24",
+        "capacity": 4,
+        "available": true
+      },
+      {
+        "id": 25,
+        "name": "Mesa 25",
+        "capacity": 3,
+        "available": true
+      }
+    ]
+  },
+  "ruizalda": {
+    "name": "UDON RUIZ DE ALDA",
+    "schedule": {
+      "monday": {
+        "open": "12:30",
+        "close": "22:30",
+        "closed": true
+      },
+      "tuesday": {
+        "open": "12:30",
+        "close": "22:30",
+        "closed": false
+      },
+      "wednesday": {
+        "open": "12:30",
+        "close": "22:30",
+        "closed": false
+      },
+      "thursday": {
+        "open": "12:30",
+        "close": "22:30",
+        "closed": false
+      },
+      "friday": {
+        "open": "12:30",
+        "close": "22:30",
+        "closed": false
+      },
+      "saturday": {
+        "open": "12:30",
+        "close": "22:30",
+        "closed": false
+      },
+      "sunday": {
+        "open": "12:30",
+        "close": "22:30",
+        "closed": false
+      }
+    },
+    "admin": {
+      "username": "admin_ruizalda",
+      "password": "$2a$10$mO3.3o/i5O9l35idgycfPunAv5usx9EQzATnl.Mgdroj/S5lYlSC6"
+    },
+    "tables": [
+      {
+        "id": 1,
+        "name": "Ventanal 1",
+        "capacity": 4,
+        "available": false
+      },
+      {
+        "id": 2,
+        "name": "Ventanal 2",
+        "capacity": 2,
+        "available": true
+      },
+      {
+        "id": 3,
+        "name": "Rincón Tranquilo",
+        "capacity": 2,
+        "available": true
+      },
+      {
+        "id": 4,
+        "name": "Mesa Redonda",
+        "capacity": 6,
+        "available": true
+      },
+      {
+        "id": 5,
+        "name": "Junto Cocina",
+        "capacity": 4,
+        "available": true
+      },
+      {
+        "id": 6,
+        "name": "Mesa Alta 1",
+        "capacity": 2,
+        "available": true
+      },
+      {
+        "id": 7,
+        "name": "Mesa Alta 2",
+        "capacity": 2,
+        "available": true
+      },
+      {
+        "id": 8,
+        "name": "Familia",
+        "capacity": 8,
+        "available": true
+      },
+      {
+        "id": 9,
+        "name": "Pareja 1",
+        "capacity": 2,
+        "available": true
+      },
+      {
+        "id": 10,
+        "name": "Pareja 2",
+        "capacity": 2,
+        "available": true
+      },
+      {
+        "id": 11,
+        "name": "Centro",
+        "capacity": 4,
+        "available": true
+      },
+      {
+        "id": 12,
+        "name": "Esquina",
+        "capacity": 3,
+        "available": true
+      },
+      {
+        "id": 13,
+        "name": "Mesa 13",
+        "capacity": 4,
+        "available": true
+      },
+      {
+        "id": 14,
+        "name": "Mesa 14",
+        "capacity": 2,
+        "available": true
+      },
+      {
+        "id": 15,
+        "name": "Mesa 15",
+        "capacity": 5,
+        "available": true
+      },
+      {
+        "id": 16,
+        "name": "Mesa 16",
+        "capacity": 3,
+        "available": true
+      },
+      {
+        "id": 17,
+        "name": "Mesa 17",
+        "capacity": 4,
+        "available": true
+      },
+      {
+        "id": 18,
+        "name": "Mesa 18",
+        "capacity": 2,
+        "available": true
+      }
+    ]
+  }
+}
