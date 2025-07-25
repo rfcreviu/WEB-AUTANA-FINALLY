@@ -721,7 +721,7 @@ let restaurants = loadDataFromFile(RESTAURANTS_FILE, {
       { id: 4, name: "Entrada Derecha", capacity: 4, available: true },
       { id: 5, name: "Entrada Izquierda", capacity: 2, available: true },
       { id: 6, name: "Privado A", capacity: 8, available: true },
-      { id: 7, name: "Privado B", capacity: 6, available: true },
+      { id: 7, name: "Privado B", capacity: 6,
       { id: 8, name: "Barra Alta 1", capacity: 2, available: true },
       { id: 9, name: "Barra Alta 2", capacity: 2, available: true },
       { id: 10, name: "Centro 1", capacity: 4, available: true },
@@ -2328,15 +2328,287 @@ app.post('/api/reservations', reservationLimiter, handleAsync(async (req, res) =
 // CONFIGURACIÓN DE EMAIL Y FUNCIONES AUXILIARES
 // ===================================
 
-// Función para enviar email de confirmación (simplificada para este ejemplo)
+// Función para enviar email de confirmación
 async function sendConfirmationEmail(reservationData) {
   try {
-    // Aquí iría la lógica real de envío de email
-    // Por ahora retornamos éxito simulado
-    return { success: true };
+    logger.info('🚀 Iniciando envío de email de confirmación', {
+      reservationId: reservationData.id,
+      customerEmail: reservationData.customerEmail,
+      restaurant: reservationData.restaurant
+    });
+
+    // Obtener configuración de email para el restaurante
+    const restaurantKey = getRestaurantKey(reservationData.restaurant);
+    if (!restaurantKey) {
+      throw new Error(`Restaurante no reconocido: ${reservationData.restaurant}`);
+    }
+
+    const emailCredentials = config.email.restaurants[restaurantKey];
+    if (!emailCredentials || !emailCredentials.user || !emailCredentials.pass) {
+      throw new Error(`Credenciales de email no configuradas para ${restaurantKey}`);
+    }
+
+    logger.debug('📧 Configuración de email encontrada', {
+      restaurant: restaurantKey,
+      emailUser: emailCredentials.user,
+      hasPassword: !!emailCredentials.pass
+    });
+
+    // Crear transporter de nodemailer
+    const transporter = nodemailer.createTransporter({
+      host: config.email.host,
+      port: config.email.port,
+      secure: config.email.secure,
+      auth: {
+        user: emailCredentials.user,
+        pass: emailCredentials.pass
+      },
+      tls: {
+        ciphers: 'SSLv3'
+      }
+    });
+
+    // Verificar conexión SMTP
+    await transporter.verify();
+    logger.debug('✅ Conexión SMTP verificada exitosamente');
+
+    // Generar contenido del email
+    const emailContent = generateEmailContent(reservationData);
+
+    // Configuración del mensaje
+    const mailOptions = {
+      from: `"${reservationData.restaurant}" <${emailCredentials.user}>`,
+      to: reservationData.customerEmail,
+      subject: `✅ Confirmación de Reserva - ${reservationData.restaurant}`,
+      html: emailContent.html,
+      text: emailContent.text
+    };
+
+    logger.debug('📤 Enviando email con opciones', {
+      from: mailOptions.from,
+      to: mailOptions.to,
+      subject: mailOptions.subject
+    });
+
+    // Enviar email
+    const info = await transporter.sendMail(mailOptions);
+    
+    logger.info('✅ Email enviado exitosamente', {
+      reservationId: reservationData.id,
+      messageId: info.messageId,
+      response: info.response
+    });
+
+    return { 
+      success: true, 
+      messageId: info.messageId,
+      response: info.response 
+    };
+
   } catch (error) {
-    return { success: false, error: error.message };
+    logger.error('❌ Error enviando email de confirmación', {
+      reservationId: reservationData.id,
+      error: error.message,
+      stack: error.stack
+    });
+    
+    return { 
+      success: false, 
+      error: error.message 
+    };
   }
+}
+
+// Función auxiliar para obtener la clave del restaurante
+function getRestaurantKey(restaurantName) {
+  const restaurantMap = {
+    'UDON CC ALISIOS': 'alisios',
+    'UDON CC MERIDIANO': 'meridiano', 
+    'UDON RUIZ DE ALDA': 'ruizalda'
+  };
+  
+  return restaurantMap[restaurantName] || null;
+}
+
+// Función para generar el contenido HTML y texto del email
+function generateEmailContent(reservationData) {
+  const html = `
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Confirmación de Reserva - UDON</title>
+      <style>
+        body {
+          font-family: Arial, sans-serif;
+          line-height: 1.6;
+          color: #333;
+          max-width: 600px;
+          margin: 0 auto;
+          padding: 20px;
+          background-color: #f4f4f4;
+        }
+        .container {
+          background: white;
+          padding: 30px;
+          border-radius: 10px;
+          box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header {
+          text-align: center;
+          border-bottom: 3px solid #d32f2f;
+          padding-bottom: 20px;
+          margin-bottom: 30px;
+        }
+        .logo {
+          font-size: 28px;
+          font-weight: bold;
+          color: #d32f2f;
+          margin-bottom: 10px;
+        }
+        .confirmation-box {
+          background: #f8f9fa;
+          border: 2px solid #28a745;
+          border-radius: 8px;
+          padding: 20px;
+          margin: 20px 0;
+          text-align: center;
+        }
+        .reservation-details {
+          background: #f8f9fa;
+          padding: 20px;
+          border-radius: 8px;
+          margin: 20px 0;
+        }
+        .detail-row {
+          display: flex;
+          justify-content: space-between;
+          margin-bottom: 10px;
+          padding: 8px 0;
+          border-bottom: 1px solid #eee;
+        }
+        .detail-label {
+          font-weight: bold;
+          color: #666;
+        }
+        .detail-value {
+          color: #333;
+        }
+        .footer {
+          text-align: center;
+          margin-top: 30px;
+          padding-top: 20px;
+          border-top: 1px solid #eee;
+          font-size: 12px;
+          color: #666;
+        }
+        .warning {
+          background: #fff3cd;
+          border: 1px solid #ffeaa7;
+          color: #856404;
+          padding: 15px;
+          border-radius: 5px;
+          margin: 20px 0;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="header">
+          <div class="logo">UDON Asian Food</div>
+          <p>Sistema de Reservas</p>
+        </div>
+        
+        <div class="confirmation-box">
+          <h2 style="color: #28a745; margin: 0;">✅ ¡Reserva Confirmada!</h2>
+          <p>Tu reserva ha sido procesada exitosamente</p>
+        </div>
+        
+        <div class="reservation-details">
+          <h3>📋 Detalles de tu reserva:</h3>
+          <div class="detail-row">
+            <span class="detail-label">Número de Reserva:</span>
+            <span class="detail-value">#${reservationData.id}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Restaurante:</span>
+            <span class="detail-value">${reservationData.restaurant}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Fecha:</span>
+            <span class="detail-value">${new Date(reservationData.date).toLocaleDateString('es-ES', { 
+              weekday: 'long', 
+              year: 'numeric', 
+              month: 'long', 
+              day: 'numeric' 
+            })}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Hora:</span>
+            <span class="detail-value">${reservationData.time}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Comensales:</span>
+            <span class="detail-value">${reservationData.guests} personas</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Nombre:</span>
+            <span class="detail-value">${reservationData.customerName}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Teléfono:</span>
+            <span class="detail-value">${reservationData.customerPhone}</span>
+          </div>
+        </div>
+        
+        <div class="warning">
+          <strong>📞 Importante:</strong> 
+          <p>Por favor, llegue puntualmente a su reserva. Si necesita cancelar o modificar su reserva, 
+          contacte directamente con el restaurante con al menos 2 horas de antelación.</p>
+        </div>
+        
+        <div style="text-align: center; margin: 30px 0;">
+          <p><strong>¡Gracias por elegir UDON Asian Food!</strong></p>
+          <p>Esperamos ofrecerle una experiencia gastronómica excepcional.</p>
+        </div>
+        
+        <div class="footer">
+          <p>Este email se ha generado automáticamente, por favor no responda a este mensaje.</p>
+          <p>Si tiene alguna consulta, contacte directamente con el restaurante.</p>
+          <p><a href="https://www.udon.es">www.udon.es</a></p>
+        </div>
+      </div>
+    </body>
+    </html>
+  `;
+
+  const text = `
+CONFIRMACIÓN DE RESERVA - UDON Asian Food
+========================================
+
+¡Su reserva ha sido confirmada exitosamente!
+
+DETALLES DE LA RESERVA:
+- Número de Reserva: #${reservationData.id}
+- Restaurante: ${reservationData.restaurant}
+- Fecha: ${new Date(reservationData.date).toLocaleDateString('es-ES')}
+- Hora: ${reservationData.time}
+- Comensales: ${reservationData.guests} personas
+- Nombre: ${reservationData.customerName}
+- Teléfono: ${reservationData.customerPhone}
+
+IMPORTANTE:
+Por favor, llegue puntualmente a su reserva. Si necesita cancelar o modificar su reserva, 
+contacte directamente con el restaurante con al menos 2 horas de antelación.
+
+¡Gracias por elegir UDON Asian Food!
+Esperamos ofrecerle una experiencia gastronómica excepcional.
+
+www.udon.es
+  `;
+
+  return { html, text };
 }
 
 // ===================================
@@ -3013,6 +3285,76 @@ app.put('/api/admin/tables', authenticateToken, handleAsync(async (req, res) => 
     tables: validatedTables
   });
 }));
+
+// ===================================
+// ENDPOINT DE DEBUG PARA CONFIGURACIÓN DE EMAIL
+// ===================================
+app.get('/api/debug/email-config', (req, res) => {
+  try {
+    const emailConfig = {
+      host: config.email.host,
+      port: config.email.port,
+      secure: config.email.secure,
+      restaurants: {}
+    };
+
+    // Verificar configuración por restaurante (sin exponer contraseñas)
+    Object.keys(config.email.restaurants).forEach(restaurant => {
+      const credentials = config.email.restaurants[restaurant];
+      emailConfig.restaurants[restaurant] = {
+        user: credentials.user || 'NOT_CONFIGURED',
+        hasPassword: !!credentials.pass,
+        configured: !!(credentials.user && credentials.pass)
+      };
+    });
+
+    res.json({
+      success: true,
+      config: emailConfig,
+      timestamp: new Date().toISOString(),
+      environment: config.server.nodeEnv
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message,
+      timestamp: new Date().toISOString()
+    });
+  }
+});
+
+// ===================================
+// ENDPOINT TEMPORAL PARA DEBUGGING (SOLO DESARROLLO)
+// ===================================
+app.get('/api/debug/logs', (req, res) => {
+  try {
+    const logDir = path.join(__dirname, 'logs');
+    const today = new Date().toISOString().split('T')[0];
+    const logFile = path.join(logDir, `app-${today}.log`);
+    
+    if (fs.existsSync(logFile)) {
+      const logs = fs.readFileSync(logFile, 'utf8');
+      const recentLogs = logs.split('\n').slice(-50).join('\n'); // Últimas 50 líneas
+      res.json({ 
+        success: true, 
+        logs: recentLogs,
+        timestamp: new Date().toISOString()
+      });
+    } else {
+      res.json({ 
+        success: false, 
+        message: 'No se encontraron logs para hoy',
+        timestamp: new Date().toISOString()
+      });
+    }
+  } catch (error) {
+    res.json({ 
+      success: false, 
+      error: error.message,
+      timestamp: new Date().toISOString()
+    });
+  }
+});
 
 // ===================================
 // INICIAR SERVIDOR
