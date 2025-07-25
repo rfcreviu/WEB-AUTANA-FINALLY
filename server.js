@@ -721,7 +721,7 @@ let restaurants = loadDataFromFile(RESTAURANTS_FILE, {
       { id: 4, name: "Entrada Derecha", capacity: 4, available: true },
       { id: 5, name: "Entrada Izquierda", capacity: 2, available: true },
       { id: 6, name: "Privado A", capacity: 8, available: true },
-      { id: 7, name: "Privado B", capacity: 6,
+      { id: 7, name: "Privado B", capacity: 6, available: true },
       { id: 8, name: "Barra Alta 1", capacity: 2, available: true },
       { id: 9, name: "Barra Alta 2", capacity: 2, available: true },
       { id: 10, name: "Centro 1", capacity: 4, available: true },
