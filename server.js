@@ -2355,7 +2355,7 @@ async function sendConfirmationEmail(reservationData) {
     });
 
     // Crear transporter de nodemailer
-    const transporter = nodemailer.createTransporter({
+    const transporter = nodemailer.createTransport({
       host: config.email.host,
       port: config.email.port,
       secure: config.email.secure,
